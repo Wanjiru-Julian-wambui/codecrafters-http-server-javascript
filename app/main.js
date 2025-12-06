@@ -3,9 +3,16 @@ const net = require("net");
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 console.log("Logs from your program will appear here!");
 
- const server = net.createServer((socket) => {   socket.on("close", () => {
+const server = net.createServer((socket) => {
+  socket.on("data", (data) => {
+    // Send HTTP 200 OK response
+    socket.write("HTTP/1.1 200 OK\r\n\r\n");
     socket.end();
-   });
- });
+  });
 
- server.listen(4221, "localhost");
+  socket.on("close", () => {
+    socket.end();
+  });
+});
+
+server.listen(4221, "localhost");
