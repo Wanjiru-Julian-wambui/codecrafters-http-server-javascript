@@ -1,5 +1,6 @@
 const net = require("net");
 
+// You can use print statements as follows for debugging, they'll be visible when running tests.
 console.log("Logs from your program will appear here!");
 
 const server = net.createServer((socket) => {
@@ -18,7 +19,21 @@ const server = net.createServer((socket) => {
     if (path === "/") {
       // Send HTTP 200 OK response
       socket.write("HTTP/1.1 200 OK\r\n\r\n");
-    } else {
+    } 
+    // Check if the path starts with "/echo/"
+    else if (path.startsWith("/echo/")) {
+      // Extract the string after "/echo/"
+      const echoString = path.substring(6); // Remove "/echo/" prefix
+      const contentLength = echoString.length;
+      
+      // Send HTTP 200 OK response with Content-Type, Content-Length, and body
+      socket.write("HTTP/1.1 200 OK\r\n");
+      socket.write("Content-Type: text/plain\r\n");
+      socket.write(`Content-Length: ${contentLength}\r\n`);
+      socket.write("\r\n");
+      socket.write(echoString);
+    } 
+    else {
       // Send HTTP 404 Not Found response
       socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
     }
